@@ -1,7 +1,6 @@
 #include <ros.h>
 #include <std_msgs/Bool.h>
 
-#define LED 13
 #define SENSOR 7
 
 ros::NodeHandle node_handle;
