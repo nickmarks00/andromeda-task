@@ -15,16 +15,16 @@ class UsbCamNode(Node):
         super().__init__("usb_cam")
         self.sensor_subscriber_ = self.create_subscription(
             Bool, "motion_detected", self.motor_callback, 10
-        )
+        )  # subscribe to motion detection
         self.cam_subscriber_ = self.create_subscription(
             CompressedImage, "/image_raw/compressed", self.img_callback, 10
-        )
+        )  # subscribe to USB camera feed
         self.bag_process = None
         self.record_timer = None
         self.motion_detected = False
         self.bag_count = 0
 
-        if os.path.exists("captures/"):
+        if os.path.exists("captures/"):  # save all captures to here
             shutil.rmtree("captures/")
 
         os.mkdir("captures/")
@@ -35,7 +35,7 @@ class UsbCamNode(Node):
     def img_callback(self, _: CompressedImage):
         if self.bag_process is None and self.motion_detected:
             self.get_logger().info("Recording started...")
-            self.bag_process = subprocess.Popen(
+            self.bag_process = subprocess.Popen(  # launch a bag record
                 [
                     "ros2",
                     "bag",
@@ -46,7 +46,9 @@ class UsbCamNode(Node):
                 ],
                 # stdin=subprocess.PIPE,
             )
-            self.record_timer = threading.Timer(5.0, self.end_bag_recording)
+            self.record_timer = threading.Timer(
+                5.0, self.end_bag_recording
+            )  # kill the process after 5 seconds
             self.record_timer.start()
             self.bag_count += 1
 

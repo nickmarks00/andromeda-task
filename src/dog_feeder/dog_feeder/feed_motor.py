@@ -4,6 +4,9 @@ from std_msgs.msg import Bool
 
 
 class FeedMotorNode(Node):
+    """
+    Subscribes to the motion_detected topic
+    """
 
     def __init__(self):
         super().__init__("feed_motor")
@@ -12,6 +15,9 @@ class FeedMotorNode(Node):
         )
 
     def motor_callback(self, msg: Bool):
+        """
+        Log to output when feed motor would have activated
+        """
         if msg.data:
             self.get_logger().info("Feeding motor activated...")
 
